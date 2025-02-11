@@ -1,0 +1,63 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    position: relative;
+    font-weight: 400;
+}
+
+body {
+    color: #2c3e50;
+    line-height: 1.6;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+.cover {
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.header-container {
+    flex-direction: column;
+    align-items: center;
+}
+
+.heading-title {
+    font-size: 25px;
+    margin-bottom: 50px;
+}
+
+.search-box {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 15px 50px;
+}
+
+.search {
+    width: 100%;
+    padding: 20px;
+    border: none;
+    border-radius: 30px;
+    outline: 1px solid #00000036;
+    font-size: 16px;
+    transition: all 0.25s ease;
+}
+
+.search:focus {
+    outline: 1px solid #000;
+}
+
+.full-col {
+    padding-top: 50px;
+    width: 100%;
+text-align: center;
+}
