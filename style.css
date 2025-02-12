@@ -16,6 +16,10 @@ h2 {
     font-size: 1.6em;
 }
 
+a {
+    text-decoration: none;
+}
+
 .cover {
     max-width: 1350px;
     margin: 50px auto;
