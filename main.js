@@ -20,31 +20,37 @@ async function displayPokemon(pokemonArray) {
             const pokemonDetails = await pokemonResponse.json();
 
             const id = pokemon.url.split('/').filter(Boolean).pop(); // Lấy ID từ URL
-            const detailUrl = `https://restfulpokemon.netlify.app/${pokemon.name}`;
+            const detailUrl = `https://restfulpokemon.netlify.app/${pokemon.name}`; // Sửa lỗi trong URL
 
             const pokemonElement = document.createElement('div');
             pokemonElement.className = 'card';
+            pokemonElement.setAttribute('data-url', detailUrl); // Sử dụng attribute để lưu URL
             pokemonElement.innerHTML = `                
-                <a href="${detailUrl}" class="pokemon" target="_blank">
-                    <div class="id">#${id}</div>
-                    <img src="${pokemonDetails.sprites.front_default}" alt="Image of ${pokemon.name}" style="width:100%">
-                    <div class="container-mini">
-                        <h3><b>${pokemon.name}</b></h3>
-                        <p class="type-list">
-                            ${pokemonDetails.types.map(type => `
-                                <span class="type ${type.type.name.toLowerCase()}">
-                                    ${type.type.name}
-                                </span>
-                            `).join(' ')}
-                        </p>
-                    </div>
-                </a>
+                <div class="id">#${id}</div>
+                <img src="${pokemonDetails.sprites.front_default}" alt="Image of ${pokemon.name}" style="width:100%">
+                <div class="container-mini">
+                    <h3><b>${pokemon.name}</b></h3>
+                    <p class="type-list">
+                        ${pokemonDetails.types.map(type => `
+                            <span class="type ${type.type.name.toLowerCase()}">
+                                ${type.type.name}
+                            </span>
+                        `).join(' ')}
+                    </p>
+                </div>
             `;
+            pokemonElement.addEventListener('click', clickCard); // Thêm sự kiện click
             pokemonList.appendChild(pokemonElement);
         } catch (error) {
             console.error('Error fetching Pokémon details:', error);
         }
     }
+}
+
+function clickCard(event) {
+    const card = event.currentTarget; // Lấy thẻ card được nhấn
+    const detailUrl = card.getAttribute('data-url'); // Lấy URL từ attribute
+    window.open(detailUrl, '_blank'); // Mở URL trong tab mới
 }
 
 
