@@ -1,16 +1,22 @@
 let offset = 0
 let limit = 36
 
-async function fetchPokemonData(offset, limit) {
+async function fetchPokemonData(offset, limit, clearList = false) {
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`;
     try {
         const response = await fetch(url);
         const data = await response.json();
+
+        if (clearList) {
+            document.getElementById('pokemon-list').innerHTML = '';
+        }
+
         displayPokemon(data.results);
     } catch (error) {
         console.error('Error fetching data: ', error);
     }
 }
+
 
 async function displayPokemon(pokemonArray) {
     const pokemonList = document.getElementById('pokemon-list');
@@ -19,12 +25,12 @@ async function displayPokemon(pokemonArray) {
             const pokemonResponse = await fetch(pokemon.url);
             const pokemonDetails = await pokemonResponse.json();
 
-            const id = pokemon.url.split('/').filter(Boolean).pop(); // Lấy ID từ URL
-            const detailUrl = `https://restfulpokemon.netlify.app/${pokemon.name}`; // Sửa lỗi trong URL
+            const id = pokemon.url.split('/').filter(Boolean).pop(); 
+            const detailUrl = `https://restfulpokemon.netlify.app/${pokemon.name}`;
 
             const pokemonElement = document.createElement('div');
             pokemonElement.className = 'card';
-            pokemonElement.setAttribute('data-url', detailUrl); // Sử dụng attribute để lưu URL
+            pokemonElement.setAttribute('data-url', detailUrl); 
             pokemonElement.innerHTML = `                
                 <div class="id">#${id}</div>
                 <img src="${pokemonDetails.sprites.front_default}" alt="Image of ${pokemon.name}" style="width:100%">
@@ -39,7 +45,7 @@ async function displayPokemon(pokemonArray) {
                     </p>
                 </div>
             `;
-            pokemonElement.addEventListener('click', clickCard); // Thêm sự kiện click
+            pokemonElement.addEventListener('click', clickCard); 
             pokemonList.appendChild(pokemonElement);
         } catch (error) {
             console.error('Error fetching Pokémon details:', error);
@@ -48,11 +54,28 @@ async function displayPokemon(pokemonArray) {
 }
 
 function clickCard(event) {
-    const card = event.currentTarget; // Lấy thẻ card được nhấn
-    const detailUrl = card.getAttribute('data-url'); // Lấy URL từ attribute
-    window.open(detailUrl, '_blank'); // Mở URL trong tab mới
+    const card = event.currentTarget; 
+    const detailUrl = card.getAttribute('data-url'); 
+    window.open(detailUrl, '_blank');
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.querySelector('.search');
+    searchInput.addEventListener('input', searchPokemon);
+});
+
+function searchPokemon() {
+    const query = document.querySelector('.search').value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const nameElement = card.querySelector('h3 b');
+        if (nameElement) {
+            const name = nameElement.textContent.toLowerCase();
+            card.style.display = name.includes(query) ? 'block' : 'none';
+        }
+    });
+}
 
 function getMore() {
     offset += limit;
